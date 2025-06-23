@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Compile and run hpkeKeys.ts",
+			"command": "npx ts-node src/hpkeKeys.ts",
+			"group": "build"
+		}
+	]
+}

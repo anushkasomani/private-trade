@@ -1,0 +1,19 @@
+{
+  "name": "synth-perp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "private": true,
+  "dependencies": {
+    "@hpke/chacha20poly1305": "^1.6.2",
+    "@hpke/core": "^1.7.2",
+    "@hpke/dhkem-x25519": "^1.6.2"
+  }
+}
