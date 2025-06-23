@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Wallet } from 'ethers';
 import { CipherSuite, HkdfSha256 } from '@hpke/core';
@@ -56,16 +57,26 @@ export function usePrivateTradeHpke() {
 
     // HPKE Encrypt
     const sender = await suite.createSenderContext({ recipientPublicKey: botPk });
+    console.log('HPKE sender context created:', sender);
+    const ctc = await sender.seal(new TextEncoder().encode("Hello world!"));
     const ciphertext = await sender.seal(encodedPayload.buffer.slice(encodedPayload.byteOffset, encodedPayload.byteOffset + encodedPayload.byteLength) as ArrayBuffer);
+    console.log(sender.enc, 'enc');
+    console.log('kk',({ enc: sender.enc, ctc: ctc }))
 
-    // Encode to base64 for transport
-    const encB64 = Buffer.from(sender.enc).toString('base64');
-    const ctB64 = Buffer.from(ciphertext).toString('base64');
+const encBase64 = Buffer.from(sender.enc).toString('base64');
+const ctcBase64 = Buffer.from(ctc).toString('base64');
 
+
+const encBuf = Buffer.from(encBase64, 'base64'); // or base64url
+const encArrayBuffer = encBuf.buffer.slice(encBuf.byteOffset, encBuf.byteOffset + encBuf.byteLength);
+const ctBuf = Buffer.from(ctcBase64, 'base64');
+const ctArrayBuffer = ctBuf.buffer.slice(ctBuf.byteOffset, ctBuf.byteOffset + ctBuf.byteLength);
+console.log('encArrayBuffer', encArrayBuffer);
+console.log('ctArrayBuffer', ctArrayBuffer);
     await fetch('http://localhost:8080/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ enc: encB64, ct: ctB64 }),
+      body: JSON.stringify({ enc: encBase64, ctc: ctcBase64 }),
     });
 
     alert('Trade sent privately 🚀');
